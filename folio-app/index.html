@@ -39,7 +39,12 @@ button:focus-visible,a:focus-visible,label:focus-visible{outline:2px solid var(-
 #library{min-height:100%;padding:calc(var(--sat) + 0px) calc(var(--sar) + 0px) calc(var(--sab) + 32px) calc(var(--sal) + 0px)}
 .lib-head{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;padding:calc(14px + var(--sat)) 20px 14px;margin-top:calc(-1 * var(--sat));background:var(--bg);border-bottom:1px solid transparent}
 .lib-head.scrolled{border-bottom-color:var(--line)}
-.brand{font-family:'Literata',Georgia,serif;font-size:26px;font-weight:600;letter-spacing:-.01em;flex:1}
+.brand{font-family:'Literata',Georgia,serif;font-size:30px;font-weight:600;letter-spacing:-.02em;flex:1}
+.text-btn{font-size:15px;font-weight:500;color:var(--accent);padding:8px 6px}
+.add-btn{width:40px;height:40px;border-radius:999px;background:var(--fg);color:var(--bg);display:grid;place-items:center;cursor:pointer}
+.empty{min-height:62vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--muted);text-align:center}
+.empty p{margin:0;font-size:16px}
+.empty-ic{width:44px;height:44px;stroke-width:1.3;opacity:.6}
 .brand span{color:var(--accent)}
 .btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;font-size:15px;font-weight:500}
 .btn-primary{background:var(--fg);color:var(--bg)}
@@ -61,14 +66,16 @@ button:focus-visible,a:focus-visible,label:focus-visible{outline:2px solid var(-
 .gen .rule{width:28px;height:2px;background:currentColor;opacity:.6;margin:10px 0}
 .meta-t{font-size:14px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .meta-a{font-size:12.5px;color:var(--muted);margin-top:-5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prog{height:3px;border-radius:3px;background:var(--line);overflow:hidden}
+.prog{height:2px;border-radius:3px;background:var(--line);overflow:hidden}
 .prog i{display:block;height:100%;background:var(--accent);border-radius:3px}
-.prog-row{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
+.prog-row{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
 .prog-row .prog{flex:1}
 .del{position:absolute;top:6px;right:6px;width:28px;height:28px;border-radius:999px;background:rgba(0,0,0,.45);color:#fff;display:grid;place-items:center;opacity:0;transition:opacity .15s;z-index:2}
 .del .icon{width:16px;height:16px}
-.card:hover .del,.card:focus-within .del{opacity:1}
-@media (hover:none){.del{opacity:.85}}
+
+.del{display:none}
+#library.editing .del{display:grid;opacity:1}
+#library.editing .cover{animation:none}
 .confirm{position:absolute;inset:0;z-index:3;background:rgba(20,16,12,.82);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-size:13.5px;text-align:center;padding:10px;border-radius:4px 7px 7px 4px}
 .confirm div{display:flex;gap:8px}
 .confirm button{padding:6px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.4);font-size:13px}
@@ -109,7 +116,7 @@ body.dragging .drop-veil{display:grid}
 .book ::selection{background:color-mix(in srgb,var(--accent) 30%,transparent)}
 #sentinel{height:0;margin:0;padding:0}
 
-.runline{position:absolute;left:calc(var(--sal) + 20px);right:calc(var(--sar) + 20px);height:42px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;user-select:none;-webkit-user-select:none}
+.runline{position:absolute;left:calc(var(--sal) + 22px);right:calc(var(--sar) + 22px);height:42px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11.5px;color:var(--muted);opacity:.85;letter-spacing:.01em;font-variant-numeric:tabular-nums;user-select:none;-webkit-user-select:none}
 #runhead{top:var(--sat);justify-content:center}
 #runhead span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80%}
 #runfoot{bottom:var(--sab)}
@@ -192,7 +199,7 @@ input[type=range]{flex:1;accent-color:var(--accent);height:28px;background:trans
 .plan{margin-top:8px;line-height:1.45;color:var(--fg)}
 .plan .ok{color:var(--accent);font-weight:600}
 .amb-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:8px}
-.amb{padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--card);text-align:left;display:flex;flex-direction:column;gap:3px}
+.amb{padding:18px 14px;align-items:center;text-align:center;border-radius:14px;border:1px solid var(--line);background:var(--card);text-align:left;display:flex;flex-direction:column;gap:3px}
 .amb b{font-size:15px;font-weight:600}
 .amb small{color:var(--muted);font-size:12px;line-height:1.3}
 .amb.on{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
@@ -209,21 +216,18 @@ input[type=range]{flex:1;accent-color:var(--accent);height:28px;background:trans
 <!-- ========== LIBRARY ========== -->
 <section id="library">
   <div class="lib-head" id="libHead">
-    <div class="brand">Folio<span>.</span></div>
-    <label class="btn btn-primary" for="fileIn" tabindex="0" id="addBtn">
-      <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add books
+    <div class="brand">Library</div>
+    <button class="text-btn" id="editBtn" hidden>Edit</button>
+    <label class="add-btn" for="fileIn" tabindex="0" id="addBtn" aria-label="Add books">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
     </label>
     <input id="fileIn" class="sr" type="file" multiple>
   </div>
-  <div class="install-hint" id="installHint" hidden>
-    <div><b>Install Folio on your iPhone</b><br>Tap <svg class="icon inline" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4M5 11v9h14v-9"/></svg> <b>Share</b> below, then <b>Add to Home Screen</b>. It will open full-screen and work offline.</div>
-    <button class="icon-btn" id="hintClose" aria-label="Dismiss"><svg class="icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-  </div>
-  <div class="lib-sub" id="libSub"></div>
   <div class="grid" id="grid"></div>
-  <div class="empty-drop" id="dropHint">
-    <b>Drop EPUB or TXT files here</b>, or tap <b>Add books</b>.<br>
-    Books are stored only in this browser on this device. Nothing is uploaded.
+  <div class="empty" id="empty" hidden>
+    <svg viewBox="0 0 24 24" class="icon empty-ic"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2.5zM4 19.5A2 2 0 0 0 6 22h13v-3"/></svg>
+    <p>No books yet</p>
+    <label class="btn btn-primary" for="fileIn">Add a book</label>
   </div>
 </section>
 <div class="drop-veil">Drop to add to your library</div>
@@ -298,8 +302,7 @@ input[type=range]{flex:1;accent-color:var(--accent);height:28px;background:trans
 <aside class="sheet tall" id="lookback" aria-label="Look back">
   <div class="grab"></div>
   <header><h3>Look back</h3><button class="icon-btn" data-close aria-label="Close"><svg class="icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
-  <p class="hint">Spoiler-free: only searches the pages you’ve already read.</p>
-  <form id="lbForm" autocomplete="off"><input id="lbIn" type="search" placeholder="A name, place or word…" enterkeyhint="search" autocapitalize="words" spellcheck="false"></form>
+  <form id="lbForm" autocomplete="off"><input id="lbIn" type="search" placeholder="Search what you’ve read" enterkeyhint="search" autocapitalize="words" spellcheck="false"></form>
   <div id="lbOut"></div>
 </aside>
 <aside class="sheet" id="recap" aria-label="Previously">
@@ -311,16 +314,14 @@ input[type=range]{flex:1;accent-color:var(--accent);height:28px;background:trans
 <aside class="sheet" id="ambience" aria-label="Ambient sound">
   <div class="grab"></div>
   <header><h3>Ambience</h3><button class="icon-btn" data-close aria-label="Close"><svg class="icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
-  <p class="hint">Background sound generated on your device. Nothing to download, and it works offline. On iPhone, turn the silent switch off to hear it.</p>
   <div class="amb-grid">
-    <button class="amb" data-amb="rain"><b>Rain</b><small>Steady rain on the window</small></button>
-    <button class="amb" data-amb="fire"><b>Fireside</b><small>A low fire, crackling</small></button>
-    <button class="amb" data-amb="ocean"><b>Ocean</b><small>Slow waves rolling in</small></button>
-    <button class="amb" data-amb="brown"><b>Deep focus</b><small>Soft brown noise</small></button>
+    <button class="amb" data-amb="rain"><b>Rain</b></button>
+    <button class="amb" data-amb="fire"><b>Fireside</b></button>
+    <button class="amb" data-amb="ocean"><b>Ocean</b></button>
+    <button class="amb" data-amb="brown"><b>Deep focus</b></button>
   </div>
   <div class="row"><span>Volume</span><input type="range" id="ambVol" class="vol" min="5" max="100" aria-label="Volume"></div>
   <div class="row"><span>Stop after</span><div class="seg" id="ambSleep"><button data-min="0">Never</button><button data-min="15">15 min</button><button data-min="30">30 min</button><button data-min="60">1 hr</button></div></div>
-  <button class="btn btn-ghost wide" data-amb="off">Turn off</button>
 </aside>
 <button id="selBtn" class="sel-btn" hidden><svg class="icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Look back</button>
 <div class="toast" id="toast" role="status"></div>
@@ -663,10 +664,10 @@ function moved() {
   const chTitle = R.book.chapters[R.ch].title;
   $('#runTitle').textContent = chTitle || R.book.title;
   if (S.mode === 'paged') {
-    $('#runPage').textContent = `${R.page + 1} / ${R.pages}` + chapterLeftLabel();
-  } else $('#runPage').textContent = `${Math.round(f * 100)}% of chapter` + chapterLeftLabel();
+    $('#runPage').textContent = chapterLeftLabel();
+  } else $('#runPage').textContent = chapterLeftLabel();
   $('#runPct').textContent = Math.round(pct * 100) + '%';
-  if (!R.scrubbing) { $('#scrub').value = Math.round(pct * 1000); $('#scrubLabel').textContent = `${chTitle || 'Section ' + (R.ch + 1)} · ${Math.round(pct * 100)}%`; }
+  if (!R.scrubbing) { $('#scrub').value = Math.round(pct * 1000); $('#scrubLabel').textContent = `${chTitle || 'Section ' + (R.ch + 1)}` + (S.mode === 'paged' ? ` · page ${R.page + 1} of ${R.pages}` : ''); }
   clearTimeout(saveT);
   saveT = setTimeout(savePos, 250);
 }
@@ -701,7 +702,7 @@ function next() {
     recordTurn();
     if (R.page < R.pages - 1) setPage(R.page + 1, true);
     else if (R.ch < R.book.chapters.length - 1) openChapter(R.ch + 1);
-    else toast('You’ve reached the end');
+    
   } else {
     if (frame.scrollTop + frame.clientHeight < frame.scrollHeight - 4) frame.scrollBy({ top: frame.clientHeight * 0.88, behavior: 'smooth' });
     else if (R.ch < R.book.chapters.length - 1) openChapter(R.ch + 1);
@@ -785,13 +786,12 @@ const coverUrls = new Map();
 function hueOf(s) { return parseInt(hash(s), 36) % 360; }
 async function renderLibrary() {
   let metas = await DB.allMeta();
-  if (!store.get('folio:hideSample', false)) metas.push(SAMPLE);
   const pos = m => store.get('folio:pos:' + m.id, null);
   metas.sort((a, b) => ((pos(b) || {}).t || b.added || 0) - ((pos(a) || {}).t || a.added || 0));
   const grid = $('#grid'); grid.innerHTML = '';
-  const real = metas.filter(m => m.type !== 'sample').length;
-  $('#libSub').textContent = real ? `${real} book${real === 1 ? '' : 's'} on this device` : 'Your library is empty — start with the guide, or add a book.';
-  $('#dropHint').hidden = real > 2;
+  $('#empty').hidden = metas.length > 0; $('#editBtn').hidden = !metas.length;
+  if (!metas.length) $('#library').classList.remove('editing');
+  $('#editBtn').textContent = $('#library').classList.contains('editing') ? 'Done' : 'Edit';
   metas.forEach((m, i) => {
     const p = pos(m); const pct = p ? Math.round(p.pct * 100) : 0;
     const card = document.createElement('div'); card.className = 'card'; card.style.animationDelay = Math.min(i, 12) * 30 + 'ms';
@@ -806,8 +806,8 @@ async function renderLibrary() {
     card.innerHTML = `<button class="cover" aria-label="Open ${esc(m.title)}">${cover}</button>
       <button class="del" aria-label="Remove ${esc(m.title)}"><svg class="icon" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       <div class="meta-t">${esc(m.title)}</div>${m.author ? `<div class="meta-a">${esc(m.author)}</div>` : ''}
-      <div class="prog-row">${p ? `<div class="prog"><i style="width:${Math.max(pct, 2)}%"></i></div><span>${pct >= 99 ? 'Done' : pct + '%'}</span>` : `<span>${m.type === 'sample' ? 'Guide' : 'New'}</span>`}</div>`;
-    $('.cover', card).onclick = () => openBook(m.id);
+      ${p && pct > 0 ? `<div class="prog-row"><div class="prog"><i style="width:${Math.max(pct, 2)}%"></i></div><span>${pct >= 99 ? 'Finished' : pct + '%'}</span></div>` : ''}`;
+    $('.cover', card).onclick = () => { if (!$('#library').classList.contains('editing')) openBook(m.id); };
     $('.del', card).onclick = e => {
       e.stopPropagation();
       if ($('.confirm', card)) return;
@@ -818,7 +818,7 @@ async function renderLibrary() {
       $('.yes', c).onclick = async ev => {
         ev.stopPropagation();
         if (m.type === 'sample') store.set('folio:hideSample', true); else { await DB.del(m.id).catch(() => {}); }
-        store.del('folio:pos:' + m.id); renderLibrary(); toast('Removed');
+        store.del('folio:pos:' + m.id); renderLibrary();
       };
     };
     grid.appendChild(card);
@@ -845,7 +845,7 @@ async function addFiles(files) {
       added++; lastId = id;
     } catch (e) { console.error(e); toast(/quota/i.test(e && e.name || '') ? 'Not enough storage space in this browser' : `Couldn’t read ${f.name}${e && e.message ? ': ' + e.message : ''}`); }
   }
-  if (added) { toast(added === 1 ? 'Book added' : `${added} books added`); if (!DB.db) setTimeout(() => toast('Note: this browser won’t keep books after you close the page'), 2800); }
+  if (added) {   }
   await renderLibrary();
   return lastId;
 }
@@ -876,7 +876,7 @@ function chapterLeftLabel() {
   if (!R.chWords) return '';
   const end = S.mode === 'paged' ? (R.page + 1) / R.pages : curFrac();
   if (end >= 0.999) return '';
-  return '  ·  ' + fmtMin(R.chWords * (1 - end) / pace()) + ' left in chapter';
+  return fmtMin(R.chWords * (1 - end) / pace()) + ' left in chapter';
 }
 // Learn the reader's own pace from page turns (ignores skims and breaks)
 function recordTurn() {
@@ -934,16 +934,16 @@ function openLookback(q = '') {
   if (q) runLookback(q); else showNameIndex();
 }
 async function showNameIndex() {
-  const out = $('#lbOut'); out.innerHTML = '<div class="muted">Gathering the names you’ve met…</div>';
+  const out = $('#lbOut'); out.innerHTML = '';
   const text = await textSoFar(); if ($('#lbIn').value.trim() || !R.book) return;
   const names = topNames(text, 36);
   out.innerHTML = names.length
-    ? `<h4>People &amp; places so far</h4><div class="chips">${names.map(([n, c]) => `<button class="chip" data-q="${esc(n)}">${esc(n)}<small>${c}</small></button>`).join('')}</div><p class="hint" style="margin-top:14px">Or press and hold any name on the page, then tap <b>Look back</b>.</p>`
-    : '<div class="lb-empty">Names you meet will gather here as you read.<br><small>You can also search for any word above.</small></div>';
+    ? `<h4>People &amp; places</h4><div class="chips">${names.map(([n, c]) => `<button class="chip" data-q="${esc(n)}">${esc(n)}<small>${c}</small></button>`).join('')}</div>`
+    : '<div class="lb-empty">Names appear here as you read.</div>';
 }
 async function runLookback(q) {
   q = q.trim(); if (!q) return showNameIndex();
-  const out = $('#lbOut'); out.innerHTML = '<div class="muted">Looking back through what you’ve read…</div>';
+  const out = $('#lbOut'); out.innerHTML = '';
   const lim = readLimit(), re = wordRe(q), hits = [];
   for (let i = 0; i <= lim.ch; i++) {
     const t = await chapterText(i); const cut = i < lim.ch ? t.length : Math.floor(t.length * clamp(lim.frac, 0, 1));
@@ -952,7 +952,7 @@ async function runLookback(q) {
   }
   if (q !== $('#lbIn').value.trim() || !R.book) return;
   R.lbHits = hits; R.lbQ = q;
-  if (!hits.length) { out.innerHTML = `<div class="lb-empty">No mention of <b>${esc(q)}</b> in what you’ve read so far.<br><small>Folio never searches past your page, so nothing here can spoil the story.</small></div>`; return; }
+  if (!hits.length) { out.innerHTML = `<div class="lb-empty">No mentions of <b>${esc(q)}</b> yet.</div>`; return; }
   renderHits(false);
 }
 function snippet(h) {
@@ -1025,7 +1025,7 @@ async function maybeRecap(pos) {
   if (!snip && !names.length) return;
   $('#recapBody').innerHTML = `<p class="recap-meta">Last read ${ago(pos.t)} · ${esc(book.chapters[R.ch].title || 'Section ' + (R.ch + 1))} · ${Math.round((pos.pct || 0) * 100)}% through</p>` +
     (snip ? `<h4>Where you left off</h4><blockquote class="recap-text">${esc(snip)}</blockquote>` : '') +
-    (names.length ? `<h4>Featured lately</h4><div class="chips">${names.map(([n]) => `<button class="chip" data-q="${esc(n)}">${esc(n)}</button>`).join('')}</div><p class="hint" style="margin-top:10px">Tap a name to see their story so far, with no spoilers.</p>` : '');
+    (names.length ? `<h4>Lately</h4><div class="chips">${names.map(([n]) => `<button class="chip" data-q="${esc(n)}">${esc(n)}</button>`).join('')}</div>` : '');
   showChrome(false); openPanel('recap');
 }
 
@@ -1043,21 +1043,21 @@ async function renderStats() {
   const left = Math.max(0, total - read), P = store.get('folio:pace', { wpm: 230, n: 0 }), wpm = P.wpm || 230, minLeft = left / wpm;
   const T = store.get('folio:today', {}); const todayMin = T.day === new Date().toDateString() ? T.sec / 60 : 0;
   const goal = store.get('folio:goal:' + id, ''), todayISO = isoDate(new Date());
-  let plan = 'Pick a date and Folio works out how much to read each day, at your own pace.';
-  if (minLeft < 0.5) plan = 'You’ve reached the end of this book.';
+  let plan = '';
+  if (minLeft < 0.5) plan = 'Finished.';
   else if (goal) {
     const days = Math.round((new Date(goal + 'T00:00') - new Date(todayISO + 'T00:00')) / 86400000) + 1;
     if (days < 1) plan = 'That date has passed. Pick a new one?';
     else {
       const per = minLeft / days, wpp = R.chWords && R.pages ? R.chWords / R.pages : 0, pages = wpp ? Math.ceil(per * wpm / wpp) : 0;
       plan = `Read about <b>${fmtMin(per)}</b> a day${pages ? ` (≈${pages} pages)` : ''} to finish by <b>${new Date(goal + 'T00:00').toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })}</b>.`;
-      if (todayMin >= per) plan += ' <span class="ok">Today’s reading done ✓</span>';
+      if (todayMin >= per) plan += ' <span class="ok">Done today ✓</span>';
     }
   }
   el.innerHTML = `<div class="stat-grid"><div><b>${Math.round(read / Math.max(1, total) * 100)}%</b><span>read</span></div><div><b>${fmtMin(minLeft)}</b><span>left at your pace</span></div><div><b>${todayMin < 1 ? '0 min' : fmtMin(todayMin)}</b><span>read today</span></div></div>
-    <div class="pace">${P.n >= 5 ? `Your pace: about ${Math.round(wpm)} words a minute` : `Learning your pace as you turn pages (assuming ${Math.round(wpm)} words a minute for now)`}</div>
+    ${P.n >= 5 ? `<div class="pace">Your pace · ${Math.round(wpm)} words a minute</div>` : ''}
     <label class="goal"><span>Finish by</span><input type="date" id="goalIn" min="${todayISO}" value="${goal}"></label>
-    <div class="plan">${plan}</div>`;
+    ${plan ? `<div class="plan">${plan}</div>` : ''}`;
   $('#goalIn').onchange = e => { store.set('folio:goal:' + id, e.target.value); renderStats(); };
 }
 
@@ -1140,7 +1140,7 @@ $('#lbOut').addEventListener('click', e => {
 });
 $('#recapBody').addEventListener('click', e => { const c = e.target.closest('.chip'); if (c) openLookback(c.dataset.q); });
 $('#returnBtn').onclick = () => { const r = R.returnTo; clearReturn(); if (r) openChapter(r.ch, { frac: r.frac }); };
-$$('[data-amb]').forEach(b => b.onclick = () => b.dataset.amb === 'off' ? Amb.stop() : Amb.play(b.dataset.amb));
+$$('[data-amb]').forEach(b => b.onclick = () => b.dataset.amb === Amb.kind ? Amb.stop() : Amb.play(b.dataset.amb));
 $('#ambVol').value = Math.round(Amb.vol * 100);
 $('#ambVol').addEventListener('input', e => Amb.setVol(e.target.value / 100));
 $$('#ambSleep [data-min]').forEach(b => b.onclick = () => Amb.sleep(+b.dataset.min));
@@ -1164,6 +1164,7 @@ selBtn.onclick = () => { const q = selBtn.dataset.q; selBtn.hidden = true; try {
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { R.lastAct = Date.now(); R.lastTurn = 0; if (Amb.kind && Amb.ctx) Amb.ctx.resume().catch(() => {}); } });
 
 /* ---------------- Events ---------------- */
+$('#editBtn').onclick = () => { $('#library').classList.toggle('editing'); renderLibrary(); };
 $('#fileIn').addEventListener('change', async e => { const files = [...e.target.files]; e.target.value = ''; if (files.length) await addFiles(files); });
 $('#addBtn').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#fileIn').click(); } });
 let dragDepth = 0;
@@ -1250,11 +1251,6 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && R.b
     navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW', e));
   }
   try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch {}
-  const standalone = navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
-  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  if (isIOS && !standalone && !store.get('folio:hintDismissed', false)) $('#installHint').hidden = false;
-  $('#hintClose').onclick = () => { $('#installHint').hidden = true; store.set('folio:hintDismissed', true); };
-  if (window.matchMedia && matchMedia('(pointer: coarse)').matches) $('#dropHint').innerHTML = 'Tap <b>Add books</b> to choose EPUB or TXT files.<br>Books are stored only on this device. Nothing is uploaded.';
   await DB.open();
   await renderLibrary();
   const open = store.get('folio:open', null);

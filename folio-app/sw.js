@@ -1,7 +1,7 @@
 // Folio service worker: keeps the app working offline.
 // Strategy: precache the app shell, then serve from cache and refresh in the background
 // (so a new upload of the files reaches the phone on the next launch).
-const CACHE = 'folio-v2';
+const CACHE = 'folio-v4';
 const SHELL = [
   './',
   'index.html',
